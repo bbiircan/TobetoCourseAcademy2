@@ -12,10 +12,10 @@ namespace Business.Concretes
 {
     public class CategoryManager : ICategoryService
     {
-        private ICategoryDal _categoryDal;
+         ICategoryDal _categoryDal;
         public CategoryManager(ICategoryDal categoryDal)
         {
-            _categoryDal = categoryDal;
+            _categoryDal = categoryDal;         
         }
         public async Task Add(Category category)
         {

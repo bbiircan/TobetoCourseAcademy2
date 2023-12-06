@@ -20,6 +20,8 @@ namespace DataAccess
             services.AddDbContext<NorthwindContext>(options => options.UseInMemoryDatabase("nArchitecture"));
             //services.AddDbContext<BaseDbContext>(options => options.UseSq lServer(configuration.GetConnectionString("RentACar")));
             services.AddScoped<ICategoryDal, EfCategoryDal>();
+            services.AddScoped<ICourseDal, EfCourseDal>();
+            services.AddScoped<IInstructorDal, EfInstructorDal>();
             return services;
         }
     }
