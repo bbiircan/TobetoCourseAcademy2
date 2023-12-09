@@ -1,4 +1,6 @@
 ﻿using Business.Abstracts;
+using Business.Dtos.Requests;
+using Business.Dtos.Responses;
 using Core.DataAccess.Paging;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -12,14 +14,24 @@ namespace Business.Concretes
 {
     public class CategoryManager : ICategoryService
     {
-         ICategoryDal _categoryDal;
+       private  ICategoryDal _categoryDal;
         public CategoryManager(ICategoryDal categoryDal)
         {
             _categoryDal = categoryDal;         
         }
-        public async Task Add(Category category)
+        public async Task<CreatedCategoryResponse> Add(CreateCategoryRequest createCategoryRequest)
         {
-            await _categoryDal.AddAsync(category);
+            Category category = new Category();
+            category.Id = Guid.NewGuid();
+            category.CategoryName = createCategoryRequest.CategoryName;
+
+
+            Category createdCategory = await _categoryDal.AddAsync(category);
+
+            CreatedCategoryResponse createdCategoryResponse = new CreatedCategoryResponse();
+            createdCategoryResponse.Id = createdCategory.Id;
+            createdCategoryResponse.CategoryName = createCategoryRequest.CategoryName;
+            return createdCategoryResponse;
         }
 
         public async Task<Paginate<Category>> GetListAsync()

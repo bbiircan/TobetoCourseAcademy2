@@ -1,4 +1,6 @@
 ﻿using Business.Abstracts;
+using Business.Dtos.Requests;
+using Business.Dtos.Responses;
 using Core.DataAccess.Paging;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -12,14 +14,22 @@ namespace Business.Concretes
 {
     public class InstructorManager:IInstructorService
     {
-         IInstructorDal _instructorDal;
+         private IInstructorDal _instructorDal;
         public InstructorManager(IInstructorDal instructorDal)
         {
             _instructorDal = instructorDal;
         }
-        public async Task Add(Instructor instructor)
+        public async Task<CreatedInstructorResponse> Add(CreateInstructorRequest createInstructorRequest)
         {
-            await _instructorDal.AddAsync(instructor);
+            Instructor instructor=new Instructor();
+            instructor.Id = Guid.NewGuid();
+            instructor.Name=createInstructorRequest.Name;
+
+            Instructor createdInstructor =await _instructorDal.AddAsync(instructor);
+
+            CreatedInstructorResponse createdInstructorResponse = new CreatedInstructorResponse();
+            createdInstructorResponse.Name = createInstructorRequest.Name;
+            return createdInstructorResponse;
         }
 
         public async Task<Paginate<Instructor>> GetListAsync()

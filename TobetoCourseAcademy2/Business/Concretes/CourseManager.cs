@@ -1,4 +1,6 @@
 ﻿using Business.Abstracts;
+using Business.Dtos.Requests;
+using Business.Dtos.Responses;
 using Core.DataAccess.Paging;
 using DataAccess.Abstracts;
 using Entities.Concretes;
@@ -12,14 +14,34 @@ namespace Business.Concretes
 {
     public class CourseManager:ICourseService
     {
-         ICourseDal _courseDal;
+         private ICourseDal _courseDal;
         public CourseManager(ICourseDal courseDal)
         {
             _courseDal = courseDal;
         }
-        public async Task Add(Course course)
+        public async Task<CreatedCourseResponse> Add(CreateCourseRequest createCourseRequest)
         {
-            await _courseDal.AddAsync(course);
+            Course course =new Course();
+            course.Id = Guid.NewGuid();
+            course.InstructorId = Guid.NewGuid();
+            course.CategoryId = Guid.NewGuid();
+            course.Description=createCourseRequest.Description;
+            course.Name=createCourseRequest.Name;
+            course.Price=createCourseRequest.Price;
+            course.Url=createCourseRequest.Url;
+
+            Course createdCourse= await _courseDal.AddAsync(course);
+
+            CreatedCourseResponse createdCourseResponse = new CreatedCourseResponse();
+            createdCourseResponse.Id = createdCourse.Id;
+            createdCourseResponse.InstructorId = createdCourse.InstructorId;
+            createdCourseResponse.CategoryId = createdCourse.CategoryId;
+            createdCourseResponse.Price=createCourseRequest.Price;
+            createdCourseResponse.Name=createCourseRequest.Name;
+            createdCourseResponse.Price = createCourseRequest.Price;
+            createdCourseResponse.Url=createCourseRequest.Url;
+            return createdCourseResponse;
+
         }
 
         public async Task<Paginate<Course>> GetListAsync()
