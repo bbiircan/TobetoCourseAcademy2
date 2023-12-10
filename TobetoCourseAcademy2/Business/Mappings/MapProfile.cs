@@ -21,13 +21,11 @@ namespace Business.Mappings
             CreateMap<Category, GetCategoryResponse>().ReverseMap();
             CreateMap<Paginate<Category>, Paginate<GetCategoryResponse>>().ReverseMap();
 
-
             CreateMap<Course, CreateCourseRequest>().ReverseMap();
             CreateMap<Course, UpdateCourseRequest>().ReverseMap();
             CreateMap<Course, CreatedCourseResponse>().ReverseMap();
             CreateMap<Course, GetCourseResponse>().ReverseMap();
             CreateMap<Paginate<Course>, Paginate<GetCourseResponse>>().ReverseMap();
-
 
             CreateMap<Instructor, CreateInstructorRequest>().ReverseMap();
             CreateMap<Instructor, UpdateInstructorRequest>().ReverseMap();

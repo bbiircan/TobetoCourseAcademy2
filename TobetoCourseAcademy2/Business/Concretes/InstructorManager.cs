@@ -27,7 +27,6 @@ namespace Business.Concretes
             var instructor=_mapper.Map<Instructor>(createInstructorRequest);
             await _instructorDal.AddAsync(instructor);
         }
-
         public async Task<Paginate<GetInstructorResponse>> GetListAsync()
         {
             var instructors = await _instructorDal.GetListAsync();

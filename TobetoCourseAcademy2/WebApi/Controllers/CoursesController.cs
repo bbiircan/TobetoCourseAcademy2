@@ -29,7 +29,5 @@ namespace WebApi.Controllers
             await _courseService.AddAsync(createCourseRequest);
             return Ok();
         }
-
-
     }
 }

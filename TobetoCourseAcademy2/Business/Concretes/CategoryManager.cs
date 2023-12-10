@@ -30,7 +30,6 @@ namespace Business.Concretes
 
         public async Task<Paginate<GetCategoryResponse>> GetListAsync()
         {
-
             var categories = await _categoryDal.GetListAsync();
             var mappedCategories=_mapper.Map<Paginate<GetCategoryResponse>>(categories);
             return mappedCategories;

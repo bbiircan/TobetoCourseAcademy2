@@ -29,6 +29,5 @@ namespace WebApi.Controllers
             await _instructorService.AddAsync(createInstructorRequest);
             return Ok();
         }
-
     }
 }

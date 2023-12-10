@@ -28,6 +28,5 @@ namespace WebApi.Controllers
             await _categoryService.AddAsync(createCategoryRequest);
             return Ok(); 
         }
-
     }
 }

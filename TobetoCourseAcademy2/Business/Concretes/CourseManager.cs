@@ -17,6 +17,7 @@ namespace Business.Concretes
     {
         private readonly ICourseDal _courseDal;
         private readonly IMapper _mapper;
+
         public CourseManager(ICourseDal courseDal, IMapper mapper)
         {
             _courseDal = courseDal;
@@ -27,7 +28,6 @@ namespace Business.Concretes
             var course=_mapper.Map<Course>(createCourseRequest);
             await _courseDal.AddAsync(course);
         }
-
         public async Task<Paginate<GetCourseResponse>> GetListAsync()
         {
             var courses =await _courseDal.GetListAsync();
