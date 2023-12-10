@@ -1,4 +1,5 @@
-﻿using Business.Abstracts;
+﻿using AutoMapper;
+using Business.Abstracts;
 using Business.Dtos.Requests;
 using Business.Dtos.Responses;
 using Core.DataAccess.Paging;
@@ -14,40 +15,23 @@ namespace Business.Concretes
 {
     public class CourseManager:ICourseService
     {
-         private ICourseDal _courseDal;
-        public CourseManager(ICourseDal courseDal)
+        private readonly ICourseDal _courseDal;
+        private readonly IMapper _mapper;
+        public CourseManager(ICourseDal courseDal, IMapper mapper)
         {
             _courseDal = courseDal;
+            _mapper=mapper;
         }
-        public async Task<CreatedCourseResponse> Add(CreateCourseRequest createCourseRequest)
+        public async Task AddAsync(CreateCourseRequest createCourseRequest)
         {
-            Course course =new Course();
-            course.Id = Guid.NewGuid();
-            course.InstructorId = Guid.NewGuid();
-            course.CategoryId = Guid.NewGuid();
-            course.Description=createCourseRequest.Description;
-            course.Name=createCourseRequest.Name;
-            course.Price=createCourseRequest.Price;
-            course.Url=createCourseRequest.Url;
-
-            Course createdCourse= await _courseDal.AddAsync(course);
-
-            CreatedCourseResponse createdCourseResponse = new CreatedCourseResponse();
-            createdCourseResponse.Id = createdCourse.Id;
-            createdCourseResponse.InstructorId = createdCourse.InstructorId;
-            createdCourseResponse.CategoryId = createdCourse.CategoryId;
-            createdCourseResponse.Price=createCourseRequest.Price;
-            createdCourseResponse.Name=createCourseRequest.Name;
-            createdCourseResponse.Price = createCourseRequest.Price;
-            createdCourseResponse.Url=createCourseRequest.Url;
-            return createdCourseResponse;
-
+            var course=_mapper.Map<Course>(createCourseRequest);
+            await _courseDal.AddAsync(course);
         }
 
-        public async Task<Paginate<Course>> GetListAsync()
+        public async Task<Paginate<GetCourseResponse>> GetListAsync()
         {
-            var result = await _courseDal.GetListAsync();
-            return result;
+            var courses =await _courseDal.GetListAsync();
+            return _mapper.Map<Paginate<GetCourseResponse>>(courses);
         }
     }
 }

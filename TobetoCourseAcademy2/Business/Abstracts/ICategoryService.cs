@@ -12,7 +12,7 @@ namespace Business.Abstracts
 {
     public interface ICategoryService
     {
-        Task<Paginate<Category>> GetListAsync();
-        Task<CreatedCategoryResponse> Add(CreateCategoryRequest createCategoryRequest);
+        Task<Paginate<GetCategoryResponse>> GetListAsync();
+        Task AddAsync(CreateCategoryRequest createCategoryRequest);
     }
 }

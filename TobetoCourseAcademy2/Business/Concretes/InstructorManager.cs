@@ -1,4 +1,5 @@
-﻿using Business.Abstracts;
+﻿using AutoMapper;
+using Business.Abstracts;
 using Business.Dtos.Requests;
 using Business.Dtos.Responses;
 using Core.DataAccess.Paging;
@@ -14,28 +15,23 @@ namespace Business.Concretes
 {
     public class InstructorManager:IInstructorService
     {
-         private IInstructorDal _instructorDal;
-        public InstructorManager(IInstructorDal instructorDal)
+        private readonly IInstructorDal _instructorDal;
+        private readonly IMapper _mapper;
+        public InstructorManager(IInstructorDal instructorDal, IMapper mapper)
         {
             _instructorDal = instructorDal;
+            _mapper = mapper;
         }
-        public async Task<CreatedInstructorResponse> Add(CreateInstructorRequest createInstructorRequest)
+        public async Task AddAsync(CreateInstructorRequest createInstructorRequest)
         {
-            Instructor instructor=new Instructor();
-            instructor.Id = Guid.NewGuid();
-            instructor.Name=createInstructorRequest.Name;
-
-            Instructor createdInstructor =await _instructorDal.AddAsync(instructor);
-
-            CreatedInstructorResponse createdInstructorResponse = new CreatedInstructorResponse();
-            createdInstructorResponse.Name = createInstructorRequest.Name;
-            return createdInstructorResponse;
+            var instructor=_mapper.Map<Instructor>(createInstructorRequest);
+            await _instructorDal.AddAsync(instructor);
         }
 
-        public async Task<Paginate<Instructor>> GetListAsync()
+        public async Task<Paginate<GetInstructorResponse>> GetListAsync()
         {
-            var result = await _instructorDal.GetListAsync();
-            return result;
+            var instructors = await _instructorDal.GetListAsync();
+            return _mapper.Map<Paginate<GetInstructorResponse>>(instructors);
         }
     }
 }

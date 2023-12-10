@@ -10,22 +10,24 @@ namespace WebApi.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        ICategoryService _categoryService;
+        private readonly ICategoryService _categoryService;
         public CategoriesController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetList()
+        {
+            return Ok(await _categoryService.GetListAsync());
+        }
+
         [HttpPost] 
         public async Task<IActionResult> Add([FromBody] CreateCategoryRequest createCategoryRequest)
         {
-            var result=await _categoryService.Add(createCategoryRequest);
-            return Ok(result); 
+            await _categoryService.AddAsync(createCategoryRequest);
+            return Ok(); 
         }
-        [HttpGet] 
-        public async Task<IActionResult> GetList() 
-        {
-            var result = await _categoryService.GetListAsync();
-            return Ok(result); 
-        }
+
     }
 }

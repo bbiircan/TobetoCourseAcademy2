@@ -10,24 +10,26 @@ namespace WebApi.Controllers
     [ApiController]
     public class CoursesController : ControllerBase
     {
-        ICourseService _courseService;
+       private readonly ICourseService _courseService;
 
         public CoursesController(ICourseService courseService)
         {
             _courseService = courseService;
         }
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] CreateCourseRequest createCourseRequest)
-        {
-            var result = await _courseService.Add(createCourseRequest);
-            return Ok(result);
-        }
+
         [HttpGet]
         public async Task<IActionResult> GetList()
         {
-            var result = await _courseService.GetListAsync();
-            return Ok(result);
+            return Ok(await _courseService.GetListAsync());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Add([FromBody] CreateCourseRequest createCourseRequest)
+        {
+            await _courseService.AddAsync(createCourseRequest);
+            return Ok();
+        }
+
 
     }
 }

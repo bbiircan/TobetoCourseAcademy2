@@ -1,4 +1,5 @@
-﻿using Business.Abstracts;
+﻿using AutoMapper;
+using Business.Abstracts;
 using Business.Dtos.Requests;
 using Business.Dtos.Responses;
 using Core.DataAccess.Paging;
@@ -14,30 +15,25 @@ namespace Business.Concretes
 {
     public class CategoryManager : ICategoryService
     {
-       private  ICategoryDal _categoryDal;
-        public CategoryManager(ICategoryDal categoryDal)
+        private readonly ICategoryDal _categoryDal;
+        private readonly IMapper _mapper;
+        public CategoryManager(ICategoryDal categoryDal, IMapper mapper)
         {
-            _categoryDal = categoryDal;         
+            _categoryDal = categoryDal;    
+            _mapper = mapper;
         }
-        public async Task<CreatedCategoryResponse> Add(CreateCategoryRequest createCategoryRequest)
-        {
-            Category category = new Category();
-            category.Id = Guid.NewGuid();
-            category.CategoryName = createCategoryRequest.CategoryName;
-
-
-            Category createdCategory = await _categoryDal.AddAsync(category);
-
-            CreatedCategoryResponse createdCategoryResponse = new CreatedCategoryResponse();
-            createdCategoryResponse.Id = createdCategory.Id;
-            createdCategoryResponse.CategoryName = createCategoryRequest.CategoryName;
-            return createdCategoryResponse;
+        public async Task AddAsync(CreateCategoryRequest createCategoryRequest)
+        { 
+            var category = _mapper.Map<Category>(createCategoryRequest);
+            await _categoryDal.AddAsync(category);
         }
 
-        public async Task<Paginate<Category>> GetListAsync()
+        public async Task<Paginate<GetCategoryResponse>> GetListAsync()
         {
-            var result = await _categoryDal.GetListAsync();
-            return result;
+
+            var categories = await _categoryDal.GetListAsync();
+            var mappedCategories=_mapper.Map<Paginate<GetCategoryResponse>>(categories);
+            return mappedCategories;
         }
     }
 }
