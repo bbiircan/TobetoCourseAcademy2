@@ -27,7 +27,6 @@ namespace Business.Concretes
             var category = _mapper.Map<Category>(createCategoryRequest);
             await _categoryDal.AddAsync(category);
         }
-
         public async Task<Paginate<GetCategoryResponse>> GetListAsync()
         {
             var categories = await _categoryDal.GetListAsync();
